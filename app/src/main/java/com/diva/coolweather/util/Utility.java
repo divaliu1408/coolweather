@@ -1,11 +1,14 @@
 package com.diva.coolweather.util;
 
 import android.text.TextUtils;
+import android.util.Log;
 import android.widget.TextView;
 
 import com.diva.coolweather.db.City;
 import com.diva.coolweather.db.Country;
 import com.diva.coolweather.db.Province;
+import com.diva.coolweather.gson.Weather;
+import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -84,4 +87,19 @@ public class Utility {
         }
         return false;
     }
+
+    public static Weather handleWeatherResponse(String response){
+        try {
+            Log.d("TAG", "handleWeatherResponse: "+response);
+            JSONObject jsonObject = new JSONObject(response);
+            JSONArray jsonArray = jsonObject.getJSONArray("HeWeather");
+            String weatherContent = jsonArray.getJSONObject(0).toString();
+            return new Gson().fromJson(weatherContent,Weather.class);
+
+        }catch (JSONException e){
+            e.printStackTrace();
+        }
+    return  null;
+    }
+
 }
